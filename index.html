@@ -1,65 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>For Renuka 💖</title>
-<style>
-  body{margin:0;height:100vh;background:radial-gradient(circle at top,#2c1053,#000);
-  overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff;font-family:Segoe UI,sans-serif;}
-  #box{z-index:2;text-align:center;padding:20px}
-  h1{font-size:3em;color:#ff5fa2;text-shadow:0 0 18px #ff5fa2;margin:0}
-  #text{margin-top:20px;font-size:1.5em;min-height:140px}
-  button{margin-top:18px;padding:12px 18px;border:0;border-radius:999px;font-size:1em;cursor:pointer}
-  canvas{position:absolute;inset:0;z-index:1}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For Renuka 💖</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      color: white;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .content {
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #ff69b4;
+      text-shadow: 0 0 10px #ff69b4;
+      animation: glowIn 2s ease-in-out forwards;
+    }
+
+    #typed {
+      font-size: 2em;
+      margin-top: 20px;
+      min-height: 50px;
+    }
+
+    h3 {
+      font-size: 1.2em;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 2s ease-in 5s forwards;
+    }
+
+    audio {
+      display: none;
+    }
+
+    @keyframes glowIn {
+      from { opacity: 0; text-shadow: none; }
+      to { opacity: 1; text-shadow: 0 0 20px #ff69b4; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 
-<canvas id="c"></canvas>
+<canvas id="hearts"></canvas>
 
-<div id="box">
+<div class="content">
   <h1>Renuka 💖</h1>
-  <div id="text"></div>
-  <button onclick="window.open('https://open.spotify.com/search/Ed%20Sheeran%20Perfect','_blank')">
-    Tap to play “Perfect” 🎵
-  </button>
-  <div style="margin-top:18px;opacity:.9;">— Sunny</div>
+  <div id="typed"></div>
+  <h3>— Forever yours, Sunny</h3>
 </div>
 
+<audio autoplay loop volume="0.1">
+  <source src="https://dl.dropboxusercontent.com/s/1r8geqflw3rctgy/perfect-ed.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-  const msg=[
-    "I love you ❤️",
-    "You are the reason my world is beautiful ✨",
-    "Every heartbeat says your name 💖",
-    "This page belongs only to you, Renuka 🌹"
+  const message = [
+    "I Love You 💌",
+    "You are the reason my world is beautiful 💫",
+    "Every heartbeat says your name ❤️",
+    "This page will always be yours, Renuka 💖"
   ];
-  let i=0,j=0,el=document.getElementById("text");
-  function type(){
-    if(i<msg.length){
-      if(j<msg[i].length){ el.innerHTML+=msg[i][j++]; setTimeout(type,45); }
-      else{ el.innerHTML+="<br>"; i++; j=0; setTimeout(type,700); }
+
+  let i = 0, char = 0;
+  const typedDiv = document.getElementById("typed");
+
+  function typeText() {
+    if (i < message.length) {
+      if (char < message[i].length) {
+        typedDiv.innerHTML += message[i].charAt(char);
+        char++;
+        setTimeout(typeText, 50);
+      } else {
+        typedDiv.innerHTML += "<br>";
+        char = 0;
+        i++;
+        setTimeout(typeText, 1000);
+      }
     }
   }
-  type();
 
-  // floating hearts particles
-  const c=document.getElementById("c"),ctx=c.getContext("2d");
-  function resize(){ c.width=innerWidth; c.height=innerHeight; }
-  resize(); addEventListener("resize",resize);
+  window.onload = () => {
+    typeText();
+    startHearts();
+  };
 
-  const hearts=[...Array(140)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,
-    s:Math.random()*4+1,v:Math.random()*1+0.6,a:Math.random()*0.5+0.3}));
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    hearts.forEach(h=>{
-      ctx.globalAlpha=h.a; ctx.fillStyle="#ff5fa2";
-      ctx.beginPath(); ctx.arc(h.x,h.y,h.s,0,Math.PI*2); ctx.fill();
-      h.y-=h.v; if(h.y<0){h.y=c.height+10; h.x=Math.random()*c.width;}
-    });
-    requestAnimationFrame(draw);
+  function startHearts() {
+    const canvas = document.getElementById('hearts');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const hearts = [];
+    for (let i = 0; i < 100; i++) {
+      hearts.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 1,
+        speed: Math.random() * 1 + 0.5,
+        opacity: Math.random() * 0.5 + 0.5
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const heart of hearts) {
+        ctx.beginPath();
+        ctx.globalAlpha = heart.opacity;
+        ctx.fillStyle = "#ff69b4";
+        ctx.arc(heart.x, heart.y, heart.size, 0, Math.PI * 2);
+        ctx.fill();
+        heart.y -= heart.speed;
+        if (heart.y < 0) {
+          heart.y = canvas.height;
+          heart.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    draw();
   }
-  draw();
 </script>
 
 </body>
