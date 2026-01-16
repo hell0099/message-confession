@@ -1,163 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>For Renuka 💖✨</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>For Renuka 💖</title>
 
-<style>
-body{
-  margin:0;
-  height:100vh;
-  overflow:hidden;
-  font-family:Segoe UI, sans-serif;
-  color:white;
-  background:black;
-}
+  <style>
+    :root{ --pink:#ff5fa2; }
+    body{
+      margin:0;
+      height:100vh;
+      overflow:hidden;
+      font-family:Segoe UI, sans-serif;
+      color:white;
+      background:#000;
+    }
 
-/* Fullscreen romantic background */
-.bg{
-  position:fixed;
-  inset:0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.75)),
-    url("https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
-  animation: zoom 15s ease-in-out infinite alternate;
-  z-index:0;
-}
+    /* background image */
+    .bg{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.80)),
+        url("https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1400&q=80")
+        center/cover no-repeat;
+      transform:scale(1.05);
+      animation: slowZoom 14s ease-in-out infinite alternate;
+      z-index:0;
+    }
+    @keyframes slowZoom{ from{transform:scale(1.03)} to{transform:scale(1.10)} }
 
-@keyframes zoom{
-  from{transform:scale(1);}
-  to{transform:scale(1.1);}
-}
+    canvas{ position:fixed; inset:0; z-index:1; }
 
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:1;
-}
+    #wrap{
+      position:relative; z-index:2;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+      padding:22px;
+    }
 
-#wrap{
-  position:relative;
-  z-index:2;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  text-align:center;
-  padding:20px;
-}
+    h1{
+      margin:0 0 14px;
+      font-size:3.1em;
+      color:var(--pink);
+      text-shadow:0 0 24px rgba(255,95,162,.9);
+    }
 
-h1{
-  font-size:3em;
-  color:#ff5fa2;
-  text-shadow:0 0 20px #ff5fa2;
-  margin-bottom:15px;
-}
+    #text{
+      font-size:1.35em;
+      line-height:1.6;
+      max-width:760px;
+      min-height:160px;
+      padding:0 10px;
+      text-shadow:0 0 10px rgba(0,0,0,.6);
+    }
 
-#text{
-  font-size:1.4em;
-  min-height:140px;
-}
+    #btn{
+      margin-top:18px;
+      border:none;
+      padding:12px 18px;
+      border-radius:999px;
+      background:var(--pink);
+      color:white;
+      font-size:1em;
+      cursor:pointer;
+      box-shadow:0 0 16px rgba(255,95,162,.7);
+    }
 
-#btn{
-  margin-top:20px;
-  background:#ff5fa2;
-  border:none;
-  padding:12px 20px;
-  border-radius:30px;
-  color:white;
-  font-size:1em;
-  cursor:pointer;
-  box-shadow:0 0 10px #ff5fa2;
-}
+    #footer{
+      margin-top:18px;
+      opacity:.9;
+      letter-spacing:.5px;
+    }
 
-#footer{
-  margin-top:18px;
-  opacity:.85;
-}
-</style>
+    /* small mobile tweak */
+    @media (max-width:420px){
+      h1{font-size:2.4em}
+      #text{font-size:1.15em; min-height:170px}
+    }
+  </style>
 </head>
 
 <body>
+  <div class="bg"></div>
+  <canvas id="c"></canvas>
 
-<div class="bg"></div>
-<canvas id="c"></canvas>
+  <div id="wrap">
+    <h1>Renuka 💖✨</h1>
+    <div id="text"></div>
 
-<div id="wrap">
-  <h1>Renuka 💖 ✨</h1>
-  <div id="text"></div>
-  <div id="footer">— Sunny</div>
-</div>
+    <button id="btn">Tap to start music 🎵</button>
+    <div id="footer">— Sunny</div>
+  </div>
 
-<audio id="bgm" preload="auto" loop>
-  <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Romantic/Scott_Holmes_Music_-_Soaring.mp3" type="audio/mpeg">
-</audio>
+  <!-- royalty-free romantic bg music -->
+  <audio id="bgm" preload="auto" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2b3f1d4e31.mp3?filename=romantic-ambient-110397.mp3" type="audio/mpeg">
+  </audio>
 
-<script>
-/* typing message */
-const msg=[
-“In a world full of moments, you are the one my heart chose forever.”
-  “I didn’t fall in love with you… I walked into it, knowing my heart had finally found its home.”
-  "I love you ❤️",
-"You are the reason my world is beautiful ✨",
-"Every heartbeat says your name 💖",
-"“Renuka, you are not just my love — you are my peace, my dream, and my forever.”💖 🌹"
-];
-let i=0,j=0,el=document.getElementById("text");
-function type(){
-  if(i<msg.length){
-    if(j<msg[i].length){
-      el.innerHTML+=msg[i][j++];
-      setTimeout(type,45);
-    }else{
-      el.innerHTML+="<br>";
-      i++; j=0;
-      setTimeout(type,700);
+  <script>
+    // Make sure script runs (debug line)
+    console.log("CINEMATIC PAGE LOADED ✅");
+
+    // typing
+    const lines = [
+      "I love you ❤️",
+      "You are the reason my world is beautiful ✨",
+      "Every heartbeat says your name 💖",
+      "This page belongs only to you, Renuka 🌹"
+    ];
+
+    const textEl = document.getElementById("text");
+    let li = 0, ci = 0;
+
+    function typeLine(){
+      if(li >= lines.length) return;
+      if(ci < lines[li].length){
+        textEl.innerHTML += lines[li].charAt(ci++);
+        setTimeout(typeLine, 42);
+      }else{
+        textEl.innerHTML += "<br>";
+        li++; ci = 0;
+        setTimeout(typeLine, 650);
+      }
     }
-  }
-}
-type();
+    typeLine();
 
-/* hearts */
-const c=document.getElementById("c"),ctx=c.getContext("2d");
-function resize(){c.width=innerWidth;c.height=innerHeight;}
-resize(); addEventListener("resize",resize);
-let hearts=[];
-for(let i=0;i<150;i++){
-  hearts.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*4+1,v:Math.random()*1+0.5,a:Math.random()*0.5+0.3});
-}
-function draw(){
-  ctx.clearRect(0,0,c.width,c.height);
-  hearts.forEach(h=>{
-    ctx.globalAlpha=h.a;
-    ctx.fillStyle="#ff5fa2";
-    ctx.beginPath();
-    ctx.arc(h.x,h.y,h.s,0,Math.PI*2);
-    ctx.fill();
-    h.y-=h.v;
-    if(h.y<0){h.y=c.height+10;h.x=Math.random()*c.width;}
-  });
-  requestAnimationFrame(draw);
-}
-draw();
+    // hearts particles
+    const canvas = document.getElementById("c");
+    const ctx = canvas.getContext("2d");
 
-/* music */
-const bgm=document.getElementById("bgm");
-document.getElementById("btn").addEventListener("click", async ()=>{
-  try{
-    bgm.volume=0.5;
-    await bgm.play();
-    document.getElementById("btn").innerText="Music playing 💖";
-  }catch(e){
-    document.getElementById("btn").innerText="Tap again 🎵";
-  }
-});
-</script>
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
 
+    const hearts = Array.from({length: 150}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 3 + 1,
+      v: Math.random() * 1.1 + 0.4,
+      a: Math.random() * 0.55 + 0.25
+    }));
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(const h of hearts){
+        ctx.globalAlpha = h.a;
+        ctx.fillStyle = "#ff5fa2";
+        ctx.beginPath();
+        ctx.arc(h.x, h.y, h.r, 0, Math.PI*2);
+        ctx.fill();
+        h.y -= h.v;
+        if(h.y < -10){
+          h.y = canvas.height + 10;
+          h.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // music (requires click/tap)
+    const bgm = document.getElementById("bgm");
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", async () => {
+      try{
+        bgm.volume = 0.5;
+        await bgm.play();
+        btn.textContent = "Music playing 💖";
+      }catch(e){
+        console.log("Audio error:", e);
+        btn.textContent = "Tap again 🎵";
+      }
+    });
+  </script>
 </body>
 </html>
-
-
-
