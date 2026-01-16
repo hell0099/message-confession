@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+  <audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2b3f1d4e31.mp3?filename=romantic-ambient-110397.mp3" type="audio/mpeg">
+</audio>
 body{
   margin:0;
   height:100vh;
@@ -66,9 +69,13 @@ canvas{
   <h1>Renuka 💖 (cinematic)</h1>
   <div id="text"></div>
 
-  <button id="btn" onclick="window.open('https://open.spotify.com/search/Ed%20Sheeran%20Perfect','_blank')">
-    Play “Perfect” 🎵
-  </button>
+  <button id="btn">
+  Tap to start music 🎵
+</button>
+
+<button id="btn2" onclick="window.open('https://open.spotify.com/search/Ed%20Sheeran%20Perfect','_blank')" style="margin-top:12px;background:#ffffff22;">
+  Open “Perfect” on Spotify 💚
+</button>
 
   <div id="footer">— Sunny</div>
 </div>
@@ -127,8 +134,21 @@ function draw(){
  requestAnimationFrame(draw);
 }
 draw();
+
+  const bgm = document.getElementById("bgm");
+document.getElementById("btn").addEventListener("click", async () => {
+  try {
+    bgm.volume = 0.25;
+    await bgm.play();
+    document.getElementById("btn").innerText = "Music playing ✅";
+  } catch (e) {
+    document.getElementById("btn").innerText = "Tap again to play 🎵";
+  }
+});
+
 </script>
 
 </body>
 </html>
+
 
