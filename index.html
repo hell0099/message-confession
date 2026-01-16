@@ -6,17 +6,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-  <audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2b3f1d4e31.mp3?filename=romantic-ambient-110397.mp3" type="audio/mpeg">
-</audio>
 body{
   margin:0;
   height:100vh;
-  background:radial-gradient(circle at top,#3b0a57,#000);
   overflow:hidden;
   font-family:Segoe UI, sans-serif;
   color:white;
+  background:black;
 }
+
+/* Fullscreen romantic background */
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.75)),
+    url("https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+  animation: zoom 15s ease-in-out infinite alternate;
+  z-index:0;
+}
+
+@keyframes zoom{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
+}
+
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:1;
+}
+
 #wrap{
   position:relative;
   z-index:2;
@@ -24,20 +44,23 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  text-align:center;
   flex-direction:column;
+  text-align:center;
   padding:20px;
 }
+
 h1{
   font-size:3em;
   color:#ff5fa2;
   text-shadow:0 0 20px #ff5fa2;
   margin-bottom:15px;
 }
+
 #text{
   font-size:1.4em;
   min-height:140px;
 }
+
 #btn{
   margin-top:20px;
   background:#ff5fa2;
@@ -49,53 +72,45 @@ h1{
   cursor:pointer;
   box-shadow:0 0 10px #ff5fa2;
 }
+
 #footer{
   margin-top:18px;
-  opacity:0.8;
-}
-canvas{
-  position:absolute;
-  inset:0;
-  z-index:1;
+  opacity:.85;
 }
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
 <canvas id="c"></canvas>
 
 <div id="wrap">
-  <h1>Renuka 💖 (cinematic)</h1>
+  <h1>Renuka 💖</h1>
   <div id="text"></div>
-
-  <button id="btn">
-  Tap to start music 🎵
-</button>
-
-<button id="btn2" onclick="window.open('https://open.spotify.com/search/Ed%20Sheeran%20Perfect','_blank')" style="margin-top:12px;background:#ffffff22;">
-  Open “Perfect” on Spotify 💚
-</button>
-
+  <button id="btn">Tap to start the music 🎵</button>
   <div id="footer">— Sunny</div>
 </div>
 
+<audio id="bgm" preload="auto" loop>
+  <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Romantic/Scott_Holmes_Music_-_Soaring.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+/* typing message */
 const msg=[
 "I love you ❤️",
 "You are the reason my world is beautiful ✨",
 "Every heartbeat says your name 💖",
 "This page belongs only to you, Renuka 🌹"
 ];
-
 let i=0,j=0,el=document.getElementById("text");
-
 function type(){
   if(i<msg.length){
     if(j<msg[i].length){
       el.innerHTML+=msg[i][j++];
       setTimeout(type,45);
-    } else{
+    }else{
       el.innerHTML+="<br>";
       i++; j=0;
       setTimeout(type,700);
@@ -104,51 +119,41 @@ function type(){
 }
 type();
 
-/* floating hearts */
+/* hearts */
 const c=document.getElementById("c"),ctx=c.getContext("2d");
 function resize(){c.width=innerWidth;c.height=innerHeight;}
 resize(); addEventListener("resize",resize);
-
 let hearts=[];
 for(let i=0;i<150;i++){
- hearts.push({
-   x:Math.random()*c.width,
-   y:Math.random()*c.height,
-   s:Math.random()*4+1,
-   v:Math.random()*1+0.5,
-   a:Math.random()*0.5+0.3
- });
+  hearts.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*4+1,v:Math.random()*1+0.5,a:Math.random()*0.5+0.3});
 }
-
 function draw(){
- ctx.clearRect(0,0,c.width,c.height);
- hearts.forEach(h=>{
-   ctx.globalAlpha=h.a;
-   ctx.fillStyle="#ff5fa2";
-   ctx.beginPath();
-   ctx.arc(h.x,h.y,h.s,0,Math.PI*2);
-   ctx.fill();
-   h.y-=h.v;
-   if(h.y<0){h.y=c.height+10;h.x=Math.random()*c.width;}
- });
- requestAnimationFrame(draw);
+  ctx.clearRect(0,0,c.width,c.height);
+  hearts.forEach(h=>{
+    ctx.globalAlpha=h.a;
+    ctx.fillStyle="#ff5fa2";
+    ctx.beginPath();
+    ctx.arc(h.x,h.y,h.s,0,Math.PI*2);
+    ctx.fill();
+    h.y-=h.v;
+    if(h.y<0){h.y=c.height+10;h.x=Math.random()*c.width;}
+  });
+  requestAnimationFrame(draw);
 }
 draw();
 
-  const bgm = document.getElementById("bgm");
-document.getElementById("btn").addEventListener("click", async () => {
-  try {
-    bgm.volume = 0.25;
+/* music */
+const bgm=document.getElementById("bgm");
+document.getElementById("btn").addEventListener("click", async ()=>{
+  try{
+    bgm.volume=0.5;
     await bgm.play();
-    document.getElementById("btn").innerText = "Music playing ✅";
-  } catch (e) {
-    document.getElementById("btn").innerText = "Tap again to play 🎵";
+    document.getElementById("btn").innerText="Music playing 💖";
+  }catch(e){
+    document.getElementById("btn").innerText="Tap again 🎵";
   }
 });
-
 </script>
 
 </body>
 </html>
-
-
